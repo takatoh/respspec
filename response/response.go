@@ -93,7 +93,7 @@ func interporate(zin []float64, ndiv int) []float64 {
 	z := make([]float64, 0)
 	k = 0
 	z = append(z, 0.0)
-	for i := 0; i < nin; i++ {
+	for i := 0; i < nin - 1; i++ {
 		if i == 0 {
 			zinc = zin[i] / float64(ndiv)
 		} else {
