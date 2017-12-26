@@ -34,7 +34,7 @@ func Resp(wave *wave.Wave, freq []float64, h float64) []*Response {
 	theta = 1.4
 	tdt = theta * wave.Dt
 	nfreq := len(freq)
-	z := wave.Data
+	z := interporate(wave.Data, 10)
 	n := len(z)
 	dt := wave.Dt
 
