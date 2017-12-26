@@ -22,7 +22,7 @@ func NewResponse(freq, sa, sv, sd float64) *Response {
 	return p
 }
 
-func Resp(wave *Wave, freq []float64, h float64) []*Response {
+func Resp(wave *wave.Wave, freq []float64, h float64) []*Response {
 	var theta, tdt, omega float64
 	var ath, acd, abz float64
 	var acc, vel, dis float64
