@@ -85,3 +85,25 @@ func Resp(wave *wave.Wave, freq []float64, h float64) []*Response {
 
 	return responses
 }
+
+func interporate(zin []float64, ndiv int) []float64 {
+	var k int
+	var zinc float64
+	nin := len(zin)
+	z := make([]float64, 0)
+	k = 0
+	z = append(z, 0.0)
+	for i := 0; i < nin; i++ {
+		if i == 0 {
+			zinc = zin[i] / float64(ndiv)
+		} else {
+			zinc = (zin[i + 1] - zin[i]) / float64(ndiv)
+		}
+		for j := 0; j < ndiv; j++ {
+			z = append(z, z[k] + zinc)
+			k++
+		}
+	}
+
+	return z
+}
