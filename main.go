@@ -46,7 +46,7 @@ func main() {
 
 	fmt.Println(wave.Name)
 	fmt.Println("Freq,Sa,Sv,Sd")
-	for res := range responses {
+	for _, res := range responses {
 		fmt.Printf("%f,%f,%f,%f\n", res.Freq, res.Sa, res.Sv, res.Sd)
 	}
 }
