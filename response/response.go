@@ -23,9 +23,9 @@ func NewResponse(freq, sa, sv, sd float64) *Response {
 }
 
 func Resp(wave *wave.Wave, freq []float64, h float64) []*Response {
-	var theta, tdt, omega float64
+	var theta, dt, tdt, omega float64
 	var ath, acd, abz float64
-	var acc, vel, dis, dt float64
+	var acc, vel, dis float64
 	var a1, a2, a3 float64
 	var am, f, vm, dm float64
 	var k, c float64
