@@ -3,13 +3,24 @@ package main
 import (
 	"fmt"
 	"os"
+	"flag"
 
 	"github.com/takatoh/respspec/wave"
 	"github.com/takatoh/respspec/response"
 )
 
 func main() {
-	csvfile := os.Args[1]
+	flag.Usage = func() {
+		fmt.Fprintf(os.Stderr,
+`Usage:
+  %s [options] <file.csv>
+options:
+`, os.Args[0])
+		flag.PrintDefaults()
+	}
+	flag.Parse()
+
+	csvfile := flag.Args()[0]
 
 	wave := wave.LoadCSV(csvfile)
 
