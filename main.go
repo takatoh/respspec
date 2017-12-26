@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"os"
-//	"io"
 	"bufio"
 	"strconv"
 	"flag"
@@ -94,7 +93,6 @@ func loadFreq(filename string) []float64 {
 	scanner := bufio.NewScanner(file)
 	for scanner.Scan() {
 		s := scanner.Text()
-//		fmt.Println(s)
 		v, _ := strconv.ParseFloat(s, 64)
 		freq = append(freq, v)
 	}
