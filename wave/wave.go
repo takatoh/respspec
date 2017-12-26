@@ -5,6 +5,7 @@ import (
 	"io"
 	"os"
 	"strconv"
+	"math"
 )
 
 type Wave struct {
@@ -38,7 +39,7 @@ func LoadCSV(filename string) *Wave {
 	for {
 		columns, err = reader.Read()
 		if err == io.EOF {
-			wave.Dt = t2 - t1
+			wave.Dt = round(t2 - t1, 2)
 			wave.Data = data
 			return wave
 		}
@@ -47,4 +48,17 @@ func LoadCSV(filename string) *Wave {
 		d, _ = strconv.ParseFloat(columns[1], 64)
 		data = append(data, d)
 	}
+}
+
+func round(val float64, places int) float64 {
+	var round float64
+	pow := math.Pow(10, float64(places))
+	digit := pow * val
+	_, div := math.Modf(digit)
+	if div >= 0.5 {
+		round = math.Ceil(digit)
+	} else {
+		round = math.Floor(digit)
+	}
+	return round / pow
 }
