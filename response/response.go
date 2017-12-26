@@ -25,23 +25,23 @@ func NewResponse(freq, sa, sv, sd float64) *Response {
 func Resp(wave *wave.Wave, freq []float64, h float64) []*Response {
 	var theta, tdt, omega float64
 	var ath, acd, abz float64
-	var acc, vel, dis float64
+	var acc, vel, dis, dt float64
 	var a1, a2, a3 float64
 	var am, f, vm, dm float64
 	var k, c float64
 
 	responses := make([]*Response, 0)
 	theta = 1.4
-	tdt = theta * wave.Dt
+	dt = wave.Dt / 10.0
+	tdt = theta * dt
 	nfreq := len(freq)
 	z := interporate(wave.Data, 10)
 	n := len(z)
-	dt := wave.Dt
 
 	for j := 0; j < nfreq; j++ {
 		if math.Abs(freq[j]) < 0.01 {
 			am = 0.0
-			for i := 0; i < n; i++ {
+			for i := 1; i < n; i++ {
 				if math.Abs(z[i]) > am {
 					am = math.Abs(z[i])
 				}
@@ -66,7 +66,7 @@ func Resp(wave *wave.Wave, freq []float64, h float64) []*Response {
 			dm = 0.0
 
 			// Willson's theta method.
-			for i := 0; i < n - 1; i++ {
+			for i := 1; i < n - 1; i++ {
 				f = (theta - 1.0) * z[i] - theta * z[i + 1]
 				ath = (f - k * dis - a2 * vel - a3 * acc) / a1
 				acd = ((theta - 1.0) * acc + ath) / theta
