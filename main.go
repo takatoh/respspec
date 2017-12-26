@@ -23,7 +23,8 @@ func main() {
 		fmt.Fprintf(os.Stderr,
 `Usage:
   %s [options] <file.csv>
-options:
+
+Options:
 `, os.Args[0])
 		flag.PrintDefaults()
 	}
