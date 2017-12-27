@@ -35,7 +35,7 @@ func Resp(wave *wave.Wave, freq []float64, h float64) []*Response {
 	dt = wave.Dt / 10.0
 	tdt = theta * dt
 	nfreq := len(freq)
-	z := interporate(wave.Data, 10)
+	z := interpolate(wave.Data, 10)
 	n := len(z)
 
 	for j := 0; j < nfreq; j++ {
@@ -86,7 +86,7 @@ func Resp(wave *wave.Wave, freq []float64, h float64) []*Response {
 	return responses
 }
 
-func interporate(zin []float64, ndiv int) []float64 {
+func interpolate(zin []float64, ndiv int) []float64 {
 	var k int
 	var zinc float64
 	nin := len(zin)
