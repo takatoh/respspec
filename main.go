@@ -28,7 +28,7 @@ Options:
 `, os.Args[0])
 		flag.PrintDefaults()
 	}
-	opt_freq := flag.String("freq", "", "Specify calcurate frequency.")
+	opt_freq := flag.String("freq", "", "Specify frequency file.")
 	opt_version := flag.Bool("version", false, "Show version.")
 	flag.Parse()
 
