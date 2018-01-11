@@ -19,6 +19,16 @@ func NewWave() *Wave {
 	return p
 }
 
+func (w *Wave) AbsMax() float64 {
+	max := 0.0
+	for d := range w.Data {
+		if math.Abs(d) > max {
+			max = math.Abs(d)
+		}
+	}
+	return d
+}
+
 func (w *Wave) Mul(factor float64) *Wave {
 	n := len(w.Data)
 	data := make([]float64, n)
