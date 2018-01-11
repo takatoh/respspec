@@ -29,6 +29,7 @@ Options:
 		flag.PrintDefaults()
 	}
 	opt_freq := flag.String("freq", "", "Specify frequency file.")
+	opt_max := flag.Float64("max", 0.0, "Specify maximum acc.")
 	opt_version := flag.Bool("version", false, "Show version.")
 	flag.Parse()
 
@@ -45,6 +46,12 @@ Options:
 	csvfile := flag.Args()[0]
 
 	wave := wave.LoadCSV(csvfile)
+
+	if *opt_max > 0.0 {
+		max := wave.AbsMax()
+		wave = wave.Mul(*opt_max / max)
+	}
+
 	responses := response.Resp(wave, freq, h)
 
 	fmt.Println(wave.Name)
