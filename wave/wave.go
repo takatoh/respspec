@@ -19,6 +19,16 @@ func NewWave() *Wave {
 	return p
 }
 
+func (w *Wave) Mul(factor float64) *Wave {
+	n := len(w.Data)
+	data := make([]float64, n)
+	for i := 0; i < n; i++ {
+		data[i] = w.Data * factor
+	}
+	w.Data = data
+	return w
+}
+
 func LoadCSV(filename string) *Wave {
 	var reader *csv.Reader
 	var columns []string
