@@ -82,3 +82,48 @@ func round(val float64, places int) float64 {
 	}
 	return round / pow
 }
+
+func LoadWave(filename, name, format string, dt float64, n, skip int) *Wave {
+	wave := newWave(name)
+	wave.Dt = dt
+
+	d_num, d_len := parseFormat(format)
+	line_num := int(math.Ceil(float64(n) / float64(d_num)))
+	data := make([]string, 0)
+
+	fp, err := os.Open(filename)
+	if err != nil {
+		panic(err)
+	}
+	defer fp.Close()
+
+	scanner := bufio.NewScanner(fp)
+	for i := 0; i < skip; i++ {
+		scanner.Scan()
+	}
+	for i := 0; i < line_num; i++ {
+		scanner.Scan()
+		line := scanner.Text()
+		runes := []rune(line)
+		for j := 0; j < len(runes); j += d_len {
+			data = append(data, string(runes[j:j + d_len]))
+		}
+	}
+
+	for i := 0; i < n; i++ {
+		d, _ := strconv.ParseFloat(strings.Trim(data[i], " "), 64)
+		wave.Data = append(wave.Data, d)
+	}
+
+	return wave
+}
+
+func parseFormat(format string) (int, int) {
+	ss := strings.Split(format, "F")
+	i64, _ := strconv.ParseInt(ss[0], 10, 64)
+	d_num := int(i64)
+	ss = strings.Split(ss[1], ".")
+	i64, _ = strconv.ParseInt(ss[0], 10, 64)
+	d_len := int(i64)
+	return d_num, d_len
+}
