@@ -51,6 +51,10 @@ Options:
 
 	srcfile := flag.Args()[0]
 	if *opt_format != "" {
+		if *opt_dt == 0.0 || *opt_num == 0 {
+			fmt.Fprintln(os.Stderr, "Error: At least -dt and -num option must be given.")
+			os.Exit(1)
+		}
 		wv = wave.LoadWave(srcfile, *opt_name, *opt_format, *opt_dt, *opt_num, *opt_skip)
 	} else {
 		wv = wave.LoadCSV(srcfile)
