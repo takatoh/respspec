@@ -31,11 +31,11 @@ Options:
 	}
 	opt_freq := flag.String("freq", "", "Specify frequency file.")
 	opt_max := flag.Float64("max", 0.0, "Specify maximum acc.")
-	opt_format := flag.String("format", "", "wave format")
-	opt_name := flag.String("name", "unnamed", "wave name")
-	opt_dt := flag.Float64("dt", 0.0, "time delta")
-	opt_num := flag.Int("num", 0, "number of data")
-	opt_skip := flag.Int("skip", 0, "skip lines")
+	opt_format := flag.String("format", "", "wave format.")
+	opt_name := flag.String("name", "unnamed", "wave name.")
+	opt_dt := flag.Float64("dt", 0.0, "time delta.")
+	opt_num := flag.Int("num", 0, "number of data.")
+	opt_skip := flag.Int("skip", 0, "skip lines.")
 	opt_version := flag.Bool("version", false, "Show version.")
 	flag.Parse()
 
