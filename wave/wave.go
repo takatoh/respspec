@@ -108,8 +108,8 @@ func LoadWave(filename, name, format string, dt float64, n, skip int) *Wave {
 		scanner.Scan()
 		line := scanner.Text()
 		runes := []rune(line)
-		for j := 0; j < len(runes); j += d_len {
-			data = append(data, string(runes[j:j + d_len]))
+		for j := 0; j < d_num; j++ {
+			data = append(data, string(runes[j * d_len:(j + 1) * d_len]))
 		}
 	}
 
