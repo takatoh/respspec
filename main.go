@@ -16,6 +16,7 @@ const (
 )
 
 func main() {
+	var wv *wave.Wave
 	var freq []float64
 	var h float64 = 0.05
 
@@ -30,6 +31,11 @@ Options:
 	}
 	opt_freq := flag.String("freq", "", "Specify frequency file.")
 	opt_max := flag.Float64("max", 0.0, "Specify maximum acc.")
+	opt_format := flag.String("format", "", "wave format")
+	opt_name := flag.String("name", "unnamed", "wave name")
+	opt_dt := flag.Float64("dt", 0.0, "time delta")
+	opt_num := flag.Int("num", 0, "number of data")
+	opt_skip := flag.Int("skip", 0, "skip lines")
 	opt_version := flag.Bool("version", false, "Show version.")
 	flag.Parse()
 
@@ -43,18 +49,21 @@ Options:
 		freq = response.DefaultFreq()
 	}
 
-	csvfile := flag.Args()[0]
-
-	wave := wave.LoadCSV(csvfile)
-
-	if *opt_max > 0.0 {
-		max := wave.AbsMax()
-		wave = wave.Mul(*opt_max / max)
+	srcfile := flag.Args()[0]
+	if *opt_format != "" {
+		wv = wave.LoadWave(srcfile, *opt_name, *opt_format, *opt_dt, *opt_num, *opt_skip)
+	} else {
+		wv = wave.LoadCSV(srcfile)
 	}
 
-	responses := response.Resp(wave, freq, h)
+	if *opt_max > 0.0 {
+		max := wv.AbsMax()
+		wv = wv.Mul(*opt_max / max)
+	}
 
-	fmt.Println(wave.Name)
+	responses := response.Resp(wv, freq, h)
+
+	fmt.Println(wv.Name)
 	fmt.Println("Freq,Sa,Sv,Sd")
 	for _, res := range responses {
 		fmt.Printf("%f,%f,%f,%f\n", res.Freq, res.Sa, res.Sv, res.Sd)
