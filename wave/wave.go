@@ -41,7 +41,7 @@ func (w *Wave) Mul(factor float64) *Wave {
 	return w
 }
 
-func LoadCSV(filename string) *Wave {
+func LoadCSV(file *os.File) *Wave {
 	var reader *csv.Reader
 	var columns []string
 	var err error
@@ -53,8 +53,7 @@ func LoadCSV(filename string) *Wave {
 	t1 = 0.0
 	t2 = 0.0
 
-	read_file, _ := os.Open(filename)
-	reader = csv.NewReader(read_file)
+	reader = csv.NewReader(file)
 
 	columns, err = reader.Read()
 	wave.Name = columns[1]
@@ -85,7 +84,7 @@ func round(val float64, places int) float64 {
 	return round / pow
 }
 
-func LoadWave(filename, name, format string, dt float64, n, skip int) *Wave {
+func LoadWave(file *os.File, name, format string, dt float64, n, skip int) *Wave {
 	wave := NewWave()
 	wave.Name = name
 	wave.Dt = dt
@@ -94,13 +93,7 @@ func LoadWave(filename, name, format string, dt float64, n, skip int) *Wave {
 	line_num := int(math.Ceil(float64(n) / float64(d_num)))
 	data := make([]string, 0)
 
-	fp, err := os.Open(filename)
-	if err != nil {
-		panic(err)
-	}
-	defer fp.Close()
-
-	scanner := bufio.NewScanner(fp)
+	scanner := bufio.NewScanner(file)
 	for i := 0; i < skip; i++ {
 		scanner.Scan()
 	}
