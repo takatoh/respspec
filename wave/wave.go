@@ -3,7 +3,9 @@ package wave
 import (
 	"encoding/csv"
 	"io"
+	"bufio"
 	"os"
+	"strings"
 	"strconv"
 	"math"
 )
@@ -84,7 +86,8 @@ func round(val float64, places int) float64 {
 }
 
 func LoadWave(filename, name, format string, dt float64, n, skip int) *Wave {
-	wave := newWave(name)
+	wave := NewWave()
+	wave.Name = name
 	wave.Dt = dt
 
 	d_num, d_len := parseFormat(format)
