@@ -23,7 +23,7 @@ func main() {
 	flag.Usage = func() {
 		fmt.Fprintf(os.Stderr,
 `Usage:
-  %s [options] <file.csv>
+  %s [options] <wavefile>
 
 Options:
 `, os.Args[0])
