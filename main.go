@@ -34,7 +34,7 @@ Options:
 	opt_format := flag.String("format", "", "wave format.")
 	opt_name := flag.String("name", "unnamed", "wave name.")
 	opt_dt := flag.Float64("dt", 0.0, "time delta.")
-	opt_num := flag.Int("num", 0, "number of data.")
+	opt_ndata := flag.Int("ndata", 0, "number of data.")
 	opt_skip := flag.Int("skip", 0, "skip lines.")
 	opt_version := flag.Bool("version", false, "Show version.")
 	flag.Parse()
@@ -58,11 +58,11 @@ Options:
 	defer fp.Close()
 
 	if *opt_format != "" {
-		if *opt_dt == 0.0 || *opt_num == 0 {
+		if *opt_dt == 0.0 || *opt_ndata == 0 {
 			fmt.Fprintln(os.Stderr, "Error: At least -dt and -num option must be given.")
 			os.Exit(1)
 		}
-		wv = wave.LoadWave(fp, *opt_name, *opt_format, *opt_dt, *opt_num, *opt_skip)
+		wv = wave.LoadWave(fp, *opt_name, *opt_format, *opt_dt, *opt_ndata, *opt_skip)
 	} else {
 		wv = wave.LoadCSV(fp)
 	}
