@@ -59,7 +59,7 @@ Options:
 
 	if *opt_format != "" {
 		if *opt_dt == 0.0 || *opt_ndata == 0 {
-			fmt.Fprintln(os.Stderr, "Error: At least -dt and -num option must be given.")
+			fmt.Fprintln(os.Stderr, "Error: At least -dt and -ndata option must be given.")
 			os.Exit(1)
 		}
 		wv = wave.LoadWave(fp, *opt_name, *opt_format, *opt_dt, *opt_ndata, *opt_skip)
