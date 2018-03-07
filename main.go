@@ -17,7 +17,7 @@ const (
 
 func main() {
 	var wv *wave.Wave
-	var freq []float64
+	var period []float64
 	var h float64 = 0.05
 
 	flag.Usage = func() {
@@ -44,9 +44,9 @@ Options:
 		os.Exit(0)
 	}
 	if *opt_freq != "" {
-		freq = loadFreq(*opt_freq)
+		period = loadPeriod(*opt_freq)
 	} else {
-		freq = response.DefaultFreq()
+		period = response.DefaultPeriod()
 	}
 
 	srcfile := flag.Args()[0]
@@ -72,17 +72,17 @@ Options:
 		wv = wv.Mul(*opt_max / max)
 	}
 
-	responses := response.Resp(wv, freq, h)
+	responses := response.Resp(wv, period, h)
 
 	fmt.Println(wv.Name)
-	fmt.Println("Freq,Sa,Sv,Sd")
+	fmt.Println("Period,Sa,Sv,Sd")
 	for _, res := range responses {
-		fmt.Printf("%f,%f,%f,%f\n", res.Freq, res.Sa, res.Sv, res.Sd)
+		fmt.Printf("%f,%f,%f,%f\n", res.Period, res.Sa, res.Sv, res.Sd)
 	}
 }
 
-func loadFreq(filename string) []float64 {
-	freq := make([]float64, 0)
+func loadPeriod(filename string) []float64 {
+	period := make([]float64, 0)
 
 	file, err := os.Open(filename)
 	if err != nil {
@@ -95,8 +95,8 @@ func loadFreq(filename string) []float64 {
 	for scanner.Scan() {
 		s := scanner.Text()
 		v, _ := strconv.ParseFloat(s, 64)
-		freq = append(freq, v)
+		period = append(period, v)
 	}
 
-	return freq
+	return period
 }
