@@ -29,7 +29,7 @@ Options:
 `, os.Args[0])
 		flag.PrintDefaults()
 	}
-	opt_freq := flag.String("freq", "", "Specify frequency file.")
+	opt_period := flag.String("period", "", "Specify period file.")
 	opt_max := flag.Float64("max", 0.0, "Specify maximum acc.")
 	opt_format := flag.String("format", "", "wave format.")
 	opt_name := flag.String("name", "unnamed", "wave name.")
@@ -43,8 +43,8 @@ Options:
 		fmt.Println(progVersion)
 		os.Exit(0)
 	}
-	if *opt_freq != "" {
-		period = loadPeriod(*opt_freq)
+	if *opt_period != "" {
+		period = loadPeriod(*opt_period)
 	} else {
 		period = response.DefaultPeriod()
 	}
