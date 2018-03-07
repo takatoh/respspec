@@ -7,22 +7,22 @@ import (
 )
 
 type Response struct {
-	Freq float64
-	Sa   float64
-	Sv   float64
-	Sd   float64
+	Period float64
+	Sa     float64
+	Sv     float64
+	Sd     float64
 }
 
-func NewResponse(freq, sa, sv, sd float64) *Response {
+func NewResponse(period, sa, sv, sd float64) *Response {
 	p := new(Response)
-	p.Freq = freq
+	p.Period = period
 	p.Sa = sa
 	p.Sv = sv
 	p.Sd = sd
 	return p
 }
 
-func Resp(wave *wave.Wave, freq []float64, h float64) []*Response {
+func Resp(wave *wave.Wave, period []float64, h float64) []*Response {
 	var theta, dt, tdt, omega float64
 	var ath, acd, abz float64
 	var acc, vel, dis float64
@@ -34,21 +34,21 @@ func Resp(wave *wave.Wave, freq []float64, h float64) []*Response {
 	theta = 1.4
 	dt = wave.Dt / 10.0
 	tdt = theta * dt
-	nfreq := len(freq)
+	nperiod := len(period)
 	z := interpolate(wave.Data, 10)
 	n := len(z)
 
-	for j := 0; j < nfreq; j++ {
-		if math.Abs(freq[j]) < 0.01 {
+	for j := 0; j < nperiod; j++ {
+		if math.Abs(period[j]) < 0.01 {
 			am = 0.0
 			for i := 1; i < n; i++ {
 				if math.Abs(z[i]) > am {
 					am = math.Abs(z[i])
 				}
 			}
-			responses = append(responses, NewResponse(freq[j], am, 0.0, 0.0))
+			responses = append(responses, NewResponse(period[j], am, 0.0, 0.0))
 		} else {
-			omega = 2.0 * math.Pi / freq[j]
+			omega = 2.0 * math.Pi / period[j]
 			k = omega * omega
 			c = 2.0 * h * omega
 
@@ -79,7 +79,7 @@ func Resp(wave *wave.Wave, freq []float64, h float64) []*Response {
 				if math.Abs(dis) > dm { dm = math.Abs(dis) }
 			}
 
-			responses = append(responses, NewResponse(freq[j], am, vm, dm))
+			responses = append(responses, NewResponse(period[j], am, vm, dm))
 		}
 	}
 
@@ -108,7 +108,7 @@ func interpolate(zin []float64, ndiv int) []float64 {
 	return z
 }
 
-func DefaultFreq() []float64 {
+func DefaultPeriod() []float64 {
 	return []float64{
 		0.02,
 		0.02042,
