@@ -7,7 +7,7 @@ import (
 	"strconv"
 	"flag"
 
-	"github.com/takatoh/respspec/wave"
+	"github.com/takatoh/seismicwave"
 	"github.com/takatoh/respspec/response"
 )
 
@@ -16,7 +16,8 @@ const (
 )
 
 func main() {
-	var wv *wave.Wave
+	var waves []*seismicwave.Wave
+	var err error
 	var period []float64
 	var h float64 = 0.05
 
@@ -50,27 +51,28 @@ Options:
 	}
 
 	srcfile := flag.Args()[0]
-	fp, err := os.Open(srcfile)
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "Cannot open file: %s\n", srcfile)
-		os.Exit(1)
-	}
-	defer fp.Close()
+//	fp, err := os.Open(srcfile)
+//	if err != nil {
+//		fmt.Fprintf(os.Stderr, "Cannot open file: %s\n", srcfile)
+//		os.Exit(1)
+//	}
+//	defer fp.Close()
 
 	if *opt_format != "" {
 		if *opt_dt == 0.0 || *opt_ndata == 0 {
 			fmt.Fprintln(os.Stderr, "Error: At least -dt and -ndata option must be given.")
 			os.Exit(1)
 		}
-		wv = wave.LoadWave(fp, *opt_name, *opt_format, *opt_dt, *opt_ndata, *opt_skip)
+		waves, err = seismicwave.LoadFixedFormat(srcfile, *opt_name, *opt_format, *opt_dt, *opt_ndata, *opt_skip)
 	} else {
-		wv = wave.LoadCSV(fp)
+		waves, err = seismicwave.LoadCSV(srcfile)
 	}
+	wv := waves[0]
 
-	if *opt_max > 0.0 {
-		max := wv.AbsMax()
-		wv = wv.Mul(*opt_max / max)
-	}
+//	if *opt_max > 0.0 {
+//		max := wv.AbsMax()
+//		wv = wv.Mul(*opt_max / max)
+//	}
 
 	responses := response.Resp(wv, period, h)
 
