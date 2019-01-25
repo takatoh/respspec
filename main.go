@@ -51,12 +51,6 @@ Options:
 	}
 
 	srcfile := flag.Args()[0]
-//	fp, err := os.Open(srcfile)
-//	if err != nil {
-//		fmt.Fprintf(os.Stderr, "Cannot open file: %s\n", srcfile)
-//		os.Exit(1)
-//	}
-//	defer fp.Close()
 
 	if *opt_format != "" {
 		if *opt_dt == 0.0 || *opt_ndata == 0 {
