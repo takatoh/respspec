@@ -31,7 +31,7 @@ Options:
 		flag.PrintDefaults()
 	}
 	opt_period := flag.String("period", "", "Specify period file.")
-	opt_max := flag.Float64("max", 0.0, "Specify maximum acc.")
+//	opt_max := flag.Float64("max", 0.0, "Specify maximum acc.")
 	opt_format := flag.String("format", "", "wave format.")
 	opt_name := flag.String("name", "unnamed", "wave name.")
 	opt_dt := flag.Float64("dt", 0.0, "time delta.")
@@ -66,6 +66,10 @@ Options:
 		waves, err = seismicwave.LoadFixedFormat(srcfile, *opt_name, *opt_format, *opt_dt, *opt_ndata, *opt_skip)
 	} else {
 		waves, err = seismicwave.LoadCSV(srcfile)
+	}
+	if err != nil {
+		fmt.Fprintln(os.Stderr, err)
+		os.Exit(1)
 	}
 	wv := waves[0]
 
