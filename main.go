@@ -106,3 +106,13 @@ func loadPeriod(filename string) []float64 {
 
 	return period
 }
+
+func mul(w *seismicwave.Wave, fac float64) *seismicwave.Wave {
+	data := w.Data
+	for i := 0; i < len(data); i++ {
+		data[i] *= fac
+	}
+	w.Data = data
+
+	return  w
+}
