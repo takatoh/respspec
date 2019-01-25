@@ -3,7 +3,7 @@ package response
 import (
 	"math"
 
-	"github.com/takatoh/respspec/wave"
+	"github.com/takatoh/seismicwave"
 )
 
 type Response struct {
@@ -22,7 +22,7 @@ func NewResponse(period, sa, sv, sd float64) *Response {
 	return p
 }
 
-func Resp(wave *wave.Wave, period []float64, h float64) []*Response {
+func Resp(wave *seismicwave.Wave, period []float64, h float64) []*Response {
 	var theta, dt, tdt, omega float64
 	var ath, acd, abz float64
 	var acc, vel, dis float64
