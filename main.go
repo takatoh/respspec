@@ -31,7 +31,7 @@ Options:
 		flag.PrintDefaults()
 	}
 	opt_period := flag.String("period", "", "Specify period file.")
-//	opt_max := flag.Float64("max", 0.0, "Specify maximum acc.")
+	opt_max := flag.Float64("max", 0.0, "Specify maximum acc.")
 	opt_format := flag.String("format", "", "wave format.")
 	opt_name := flag.String("name", "unnamed", "wave name.")
 	opt_dt := flag.Float64("dt", 0.0, "time delta.")
@@ -73,10 +73,10 @@ Options:
 	}
 	wv := waves[0]
 
-//	if *opt_max > 0.0 {
-//		max := wv.AbsMax()
-//		wv = wv.Mul(*opt_max / max)
-//	}
+	if *opt_max > 0.0 {
+		max := wv.AbsMax()
+		wv = mul(wv, *opt_max / max)
+	}
 
 	responses := response.Resp(wv, period, h)
 
