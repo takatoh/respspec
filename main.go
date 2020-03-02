@@ -19,7 +19,6 @@ func main() {
 	var waves []*seismicwave.Wave
 	var err error
 	var period []float64
-	var h float64 = 0.05
 
 	flag.Usage = func() {
 		fmt.Fprintf(os.Stderr,
@@ -31,6 +30,7 @@ Options:
 		flag.PrintDefaults()
 	}
 	opt_period := flag.String("period", "", "Specify period file.")
+	opt_h := flag.Float64("h", 0.05, "Specify attenuation constant.")
 	opt_max := flag.Float64("max", 0.0, "Specify maximum acc.")
 	opt_format := flag.String("format", "", "wave format.")
 	opt_name := flag.String("name", "unnamed", "wave name.")
@@ -72,7 +72,7 @@ Options:
 		wv = mul(wv, *opt_max / max)
 	}
 
-	responses := response.Resp(wv, period, h)
+	responses := response.Resp(wv, period, *opt_h)
 
 	fmt.Println(wv.Name)
 	fmt.Println("Period,Sa,Sv,Sd")
