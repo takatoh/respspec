@@ -37,6 +37,7 @@ Options:
 	opt_dt := flag.Float64("dt", 0.0, "time delta.")
 	opt_ndata := flag.Int("ndata", 0, "number of data.")
 	opt_skip := flag.Int("skip", 0, "skip lines.")
+	opt_si := flag.Bool("si", false, "Calculate SI.")
 	opt_version := flag.Bool("version", false, "Show version.")
 	flag.Parse()
 
