@@ -81,9 +81,14 @@ Options:
 	responses := response.Resp(wv, period, *opt_h)
 
 	fmt.Println(wv.Name)
-	fmt.Println("Period,Sa,Sv,Sd")
-	for _, res := range responses {
-		fmt.Printf("%f,%f,%f,%f\n", res.Period, res.Sa, res.Sv, res.Sd)
+	if *opt_si {
+		si := response.CalcSI(responses)
+		fmt.Printf("SI = %f\n", si)
+	} else {
+		fmt.Println("Period,Sa,Sv,Sd")
+		for _, res := range responses {
+			fmt.Printf("%f,%f,%f,%f\n", res.Period, res.Sa, res.Sv, res.Sd)
+		}
 	}
 }
 
