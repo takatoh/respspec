@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"bufio"
+	"sort"
 	"strconv"
 	"flag"
 
@@ -37,6 +38,7 @@ Options:
 	opt_dt := flag.Float64("dt", 0.0, "time delta.")
 	opt_ndata := flag.Int("ndata", 0, "number of data.")
 	opt_skip := flag.Int("skip", 0, "skip lines.")
+	opt_si := flag.Bool("si", false, "Calculate SI.")
 	opt_version := flag.Bool("version", false, "Show version.")
 	flag.Parse()
 
@@ -48,6 +50,10 @@ Options:
 		period = loadPeriod(*opt_period)
 	} else {
 		period = response.DefaultPeriod()
+	}
+	if *opt_si {
+		vals := []float64{ 0.1, 2.5 }
+		period = insertPeriod(period, vals)
 	}
 
 	srcfile := flag.Args()[0]
@@ -75,9 +81,14 @@ Options:
 	responses := response.Resp(wv, period, *opt_h)
 
 	fmt.Println(wv.Name)
-	fmt.Println("Period,Sa,Sv,Sd")
-	for _, res := range responses {
-		fmt.Printf("%f,%f,%f,%f\n", res.Period, res.Sa, res.Sv, res.Sd)
+	if *opt_si {
+		si := response.CalcSI(responses)
+		fmt.Printf("SI = %f\n", si)
+	} else {
+		fmt.Println("Period,Sa,Sv,Sd")
+		for _, res := range responses {
+			fmt.Printf("%f,%f,%f,%f\n", res.Period, res.Sa, res.Sv, res.Sd)
+		}
 	}
 }
 
@@ -109,4 +120,24 @@ func mul(w *seismicwave.Wave, fac float64) *seismicwave.Wave {
 	w.Data = data
 
 	return  w
+}
+
+func insertPeriod(period []float64, vals []float64) []float64 {
+	for _, x := range vals {
+		if !(find(period, x)) {
+			period = append(period, x)
+		}
+	}
+	sort.Float64s(period)
+	
+	return period
+}
+
+func find(s []float64, x float64) bool {
+	for _, v := range s {
+		if x == v {
+			return true
+		}
+	}
+	return false
 }

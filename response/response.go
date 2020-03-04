@@ -412,3 +412,17 @@ func DefaultPeriod() []float64 {
 		10.0,
 	}
 }
+
+func CalcSI(resp []*Response) float64 {
+	var si float64 = 0.0
+	for i := 1; i < len(resp); i++ {
+		r0 := resp[i - 1]
+		r1 := resp[i]
+		if 0.1 < r1.Period && r1.Period <= 2.5 {
+			si = si + (r0.Sv + r1.Sv) * (r1.Period - r0.Period) / 2.0
+		}
+	}
+	
+	return si / 2.4
+}
+
