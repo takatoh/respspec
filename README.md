@@ -1,6 +1,6 @@
 # respspec
 
-地震波の応答スペクトル（Sa, Sv, Sd）を求めます。
+地震動の応答スペクトル（Sa, Sv, Sd）を求めます。
 
 ## Install
 ```
@@ -10,7 +10,7 @@ go get github.com/takatoh/respspec
 ## Usage
 入力ファイルはCSV形式と固定長形式に対応しています。
 
-CSV形式の場合は、1波のみで、1行目はヘッダ（TIMEと地震波名）にします。
+CSV形式の場合は、1波のみで、1行目はヘッダ（TIMEと地震動名）にします。
 
 ```
 respspec sample.csv
