@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"bufio"
+	"sort"
 	"strconv"
 	"flag"
 
@@ -49,6 +50,10 @@ Options:
 		period = loadPeriod(*opt_period)
 	} else {
 		period = response.DefaultPeriod()
+	}
+	if *opt_si {
+		vals := []float64{ 0.1, 2.5 }
+		period = insertPeriod(period, vals)
 	}
 
 	srcfile := flag.Args()[0]
@@ -110,4 +115,24 @@ func mul(w *seismicwave.Wave, fac float64) *seismicwave.Wave {
 	w.Data = data
 
 	return  w
+}
+
+func insertPeriod(period []float64, vals []float64) []float64 {
+	for _, x := range vals {
+		if !(find(period, x)) {
+			period = append(period, x)
+		}
+	}
+	sort.Float64s(period)
+	
+	return period
+}
+
+func find(s []float64, x float64) bool {
+	for _, v := range s {
+		if x == v {
+			return true
+		}
+	}
+	return false
 }
