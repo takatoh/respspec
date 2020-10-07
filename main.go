@@ -78,15 +78,15 @@ Options:
 		wv = mul(wv, *opt_max / max)
 	}
 
-	responses := response.Resp(wv, period, *opt_h)
+	spectrum := response.Spectrum(wv, period, *opt_h)
 
 	fmt.Println(wv.Name)
 	if *opt_si {
-		si := response.CalcSI(responses)
+		si := response.CalcSI(spectrum)
 		fmt.Printf("SI = %f\n", si)
 	} else {
 		fmt.Println("Period,Sa,Sv,Sd")
-		for _, res := range responses {
+		for _, res := range spectrum {
 			fmt.Printf("%f,%f,%f,%f\n", res.Period, res.Sa, res.Sv, res.Sd)
 		}
 	}
