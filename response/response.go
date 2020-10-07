@@ -30,7 +30,7 @@ func Spectrum(wave *seismicwave.Wave, period []float64, h float64) []*Response {
 	var am, f, vm, dm float64
 	var k, c float64
 
-	responses := make([]*Response, 0)
+	spectrum := make([]*Response, 0)
 	theta = 1.4
 	dt = wave.Dt / 10.0
 	tdt = theta * dt
@@ -46,7 +46,7 @@ func Spectrum(wave *seismicwave.Wave, period []float64, h float64) []*Response {
 					am = math.Abs(z[i])
 				}
 			}
-			responses = append(responses, NewResponse(period[j], am, 0.0, 0.0))
+			spectrum = append(spectrum, NewResponse(period[j], am, 0.0, 0.0))
 		} else {
 			omega = 2.0 * math.Pi / period[j]
 			k = omega * omega
@@ -79,11 +79,11 @@ func Spectrum(wave *seismicwave.Wave, period []float64, h float64) []*Response {
 				if math.Abs(dis) > dm { dm = math.Abs(dis) }
 			}
 
-			responses = append(responses, NewResponse(period[j], am, vm, dm))
+			spectrum = append(spectrum, NewResponse(period[j], am, vm, dm))
 		}
 	}
 
-	return responses
+	return spectrum
 }
 
 func interpolate(zin []float64, ndiv int) []float64 {
