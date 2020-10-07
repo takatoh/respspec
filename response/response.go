@@ -66,7 +66,7 @@ func Spectrum(wave *seismicwave.Wave, period []float64, h float64) []*Response {
 			dm = 0.0
 
 			// Willson's theta method.
-			for i := 1; i < n - 1; i++ {
+			for i := 0; i < n - 1; i++ {
 				f = (theta - 1.0) * z[i] - theta * z[i + 1]
 				ath = (f - k * dis - a2 * vel - a3 * acc) / a1
 				acd = ((theta - 1.0) * acc + ath) / theta
