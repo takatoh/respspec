@@ -23,20 +23,12 @@ func NewResponse(period, sa, sv, sd float64) *Response {
 }
 
 func Spectrum(wave *seismicwave.Wave, period []float64, h float64) []*Response {
-	var theta, dt, tdt, omega float64
-	var ath, acd, abz float64
-	var acc, vel, dis float64
-	var a1, a2, a3 float64
-	var am, f, vm, dm float64
-	var k, c float64
+	var am, vm, dm float64
 
 	spectrum := make([]*Response, 0)
-	theta = 1.4
-	dt = wave.Dt / 10.0
-	tdt = theta * dt
+	dt := wave.Dt / 10.0
 	nperiod := len(period)
 	z := interpolate(wave.Data, 10)
-	n := len(z)
 
 	for j := 0; j < nperiod; j++ {
 		if math.Abs(period[j]) < 0.01 {
@@ -48,37 +40,7 @@ func Spectrum(wave *seismicwave.Wave, period []float64, h float64) []*Response {
 			}
 			spectrum = append(spectrum, NewResponse(period[j], am, 0.0, 0.0))
 		} else {
-			omega = 2.0 * math.Pi / period[j]
-			k = omega * omega
-			c = 2.0 * h * omega
-
-			// Constants for Willson's theta method.
-			a1 = 1.0 + tdt * c / 2.0 + k * tdt * tdt / 6.0
-			a2 = c + k * tdt
-			a3 = tdt * c / 2.0 + k / 3.0 * tdt * tdt
-
-			// Set initial values.
-			acc = 0.0
-			vel = 0.0
-			dis = 0.0
-			am = 0.0
-			vm = 0.0
-			dm = 0.0
-
-			// Willson's theta method.
-			for i := 0; i < n - 1; i++ {
-				f = (theta - 1.0) * z[i] - theta * z[i + 1]
-				ath = (f - k * dis - a2 * vel - a3 * acc) / a1
-				acd = ((theta - 1.0) * acc + ath) / theta
-				dis = dis + dt * vel + acc * dt * dt / 3.0 + acd * dt * dt / 6.0
-				vel = vel + (acc + acd) * dt / 2.0
-				acc = acd
-				abz = math.Abs(acc + z[i + 1])
-				if abz > am { am = abz }
-				if math.Abs(vel) > vm { vm = math.Abs(vel) }
-				if math.Abs(dis) > dm { dm = math.Abs(dis) }
-			}
-
+			am, vm, dm = WilsonTheta(z, dt, period[j], h)
 			spectrum = append(spectrum, NewResponse(period[j], am, vm, dm))
 		}
 	}
