@@ -3,6 +3,8 @@
 地震動の応答スペクトル（Sa, Sv, Sd）を求めます。
 また、スペクトル強度（SI）を求めることもできます。
 
+respspec は Go 言語で書かれています。インストールするには Go 言語の処理系が必要です。
+
 ## Install
 
     > go get github.com/takatoh/respspec
