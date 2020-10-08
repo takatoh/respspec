@@ -2,6 +2,7 @@ package response
 
 import (
 	"math"
+//	"fmt"
 
 	"github.com/takatoh/seismicwave"
 )
@@ -29,6 +30,7 @@ func Spectrum(wave *seismicwave.Wave, period []float64, h float64) []*Response {
 	dt := wave.Dt / 10.0
 	nperiod := len(period)
 	z := interpolate(wave.Data, 10)
+//	fmt.Println(len(z))
 
 	for j := 0; j < nperiod; j++ {
 		if math.Abs(period[j]) < 0.01 {
@@ -52,20 +54,22 @@ func interpolate(zin []float64, ndiv int) []float64 {
 	var k int
 	var zinc float64
 	nin := len(zin)
+//	fmt.Printf("nin = %d\n", nin)
 	z := make([]float64, 0)
 	k = 0
 	z = append(z, 0.0)
-	for i := 0; i < nin - 1; i++ {
+	for i := 0; i < nin; i++ {
 		if i == 0 {
 			zinc = zin[i] / float64(ndiv)
 		} else {
-			zinc = (zin[i + 1] - zin[i]) / float64(ndiv)
+			zinc = (zin[i] - zin[i - 1]) / float64(ndiv)
 		}
 		for j := 0; j < ndiv; j++ {
 			z = append(z, z[k] + zinc)
 			k++
 		}
 	}
+//	fmt.Printf("len(z) = %d\n", len(z))
 
 	return z
 }
