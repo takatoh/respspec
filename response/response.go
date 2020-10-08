@@ -96,7 +96,7 @@ func WilsonTheta(z []float64, dt, period, h float64) (float64, float64, float64)
 	vm := 0.0
 	dm := 0.0
 
-	for i := 0; i < len(z) - 1; i++ {
+	for i := 1; i < len(z) - 1; i++ {
 		f := (theta - 1.0) * z[i] - theta * z[i + 1]
 		ath := (f - k * dis - a2 * vel - a3 * acc) / a1
 		acd := ((theta - 1.0) * acc + ath) / theta
