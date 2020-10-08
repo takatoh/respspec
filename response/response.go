@@ -33,7 +33,7 @@ func Spectrum(wave *seismicwave.Wave, period []float64, h float64) []*Response {
 	for j := 0; j < nperiod; j++ {
 		if math.Abs(period[j]) < 0.01 {
 			am = 0.0
-			for i := 1; i < n; i++ {
+			for i := 1; i < len(z); i++ {
 				if math.Abs(z[i]) > am {
 					am = math.Abs(z[i])
 				}
@@ -71,7 +71,7 @@ func interpolate(zin []float64, ndiv int) []float64 {
 }
 
 // Wilson-theta method.
-func WilsonTheta(z []float64, dt, period, h float64) {
+func WilsonTheta(z []float64, dt, period, h float64) (float64, float64, float64) {
 	theta := 1.4
 
 	tdt := theta * dt
