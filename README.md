@@ -7,7 +7,7 @@ respspec は Go 言語で書かれています。インストールするには 
 
 ## Install
 
-    > go get github.com/takatoh/respspec
+    > go install github.com/takatoh/respspec@latest
 
 ## Usage
 
