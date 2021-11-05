@@ -1,15 +1,15 @@
 package main
 
 import (
+	"bufio"
+	"flag"
 	"fmt"
 	"os"
-	"bufio"
 	"sort"
 	"strconv"
-	"flag"
 
-	"github.com/takatoh/seismicwave"
 	"github.com/takatoh/respspec/response"
+	"github.com/takatoh/seismicwave"
 )
 
 const (
@@ -23,7 +23,7 @@ func main() {
 
 	flag.Usage = func() {
 		fmt.Fprintf(os.Stderr,
-`Usage:
+			`Usage:
   %s [options] <wavefile>
 
 Options:
@@ -52,7 +52,7 @@ Options:
 		period = response.DefaultPeriod()
 	}
 	if *opt_si {
-		vals := []float64{ 0.1, 2.5 }
+		vals := []float64{0.1, 2.5}
 		period = insertPeriod(period, vals)
 	}
 
@@ -75,7 +75,7 @@ Options:
 
 	if *opt_max > 0.0 {
 		max := wv.AbsMax()
-		wv = mul(wv, *opt_max / max)
+		wv = mul(wv, *opt_max/max)
 	}
 
 	spectrum := response.Spectrum(wv, period, *opt_h)
@@ -119,7 +119,7 @@ func mul(w *seismicwave.Wave, fac float64) *seismicwave.Wave {
 	}
 	w.Data = data
 
-	return  w
+	return w
 }
 
 func insertPeriod(period []float64, vals []float64) []float64 {
@@ -129,7 +129,7 @@ func insertPeriod(period []float64, vals []float64) []float64 {
 		}
 	}
 	sort.Float64s(period)
-	
+
 	return period
 }
 
