@@ -23,7 +23,7 @@ func NewResponse(period, sa, sv, sd float64) *Response {
 	return p
 }
 
-func Spectrum2(wave *seismicwave.Wave, period []float64, h float64) []*Response {
+func Spectrum(wave *seismicwave.Wave, period []float64, h float64) []*Response {
 	var am, vm, dm float64
 
 	spectrum := make([]*Response, 0)
