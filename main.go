@@ -5,6 +5,7 @@ import (
 	"flag"
 	"fmt"
 	"os"
+	"path/filepath"
 	"sort"
 	"strconv"
 
@@ -27,7 +28,7 @@ func main() {
   %s [options] <wavefile>
 
 Options:
-`, os.Args[0])
+`, filepath.Base(os.Args[0]))
 		flag.PrintDefaults()
 	}
 	opt_period := flag.String("period", "", "Specify period file.")
