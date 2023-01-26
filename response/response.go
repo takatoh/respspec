@@ -3,6 +3,7 @@ package response
 import (
 	"math"
 
+	"github.com/takatoh/sdof/directintegration"
 	"github.com/takatoh/seismicwave"
 )
 
@@ -29,6 +30,7 @@ func Spectrum(wave *seismicwave.Wave, period []float64, h float64) []*Response {
 	dt := wave.Dt / 10.0
 	nperiod := len(period)
 	z := interpolate(wave.Data, 10)
+	n := len(z)
 
 	for j := 0; j < nperiod; j++ {
 		if math.Abs(period[j]) < 0.01 {
@@ -40,12 +42,28 @@ func Spectrum(wave *seismicwave.Wave, period []float64, h float64) []*Response {
 			}
 			spectrum = append(spectrum, NewResponse(period[j], am, 0.0, 0.0))
 		} else {
-			am, vm, dm = WilsonTheta(z, dt, period[j], h)
+			w := 2.0 * math.Pi / period[j]
+			acc, vel, dis := directintegration.WilsonTheta(h, w, dt, n, z)
+			am = absMax(acc)
+			vm = absMax(vel)
+			dm = absMax(dis)
 			spectrum = append(spectrum, NewResponse(period[j], am, vm, dm))
 		}
 	}
 
 	return spectrum
+}
+
+func absMax(z []float64) float64 {
+	zm := math.Abs(z[0])
+	n := len(z)
+	for i := 1; i < n; i++ {
+		za := math.Abs(z[i])
+		if za > zm {
+			zm = za
+		}
+	}
+	return zm
 }
 
 func interpolate(zin []float64, ndiv int) []float64 {
@@ -59,53 +77,15 @@ func interpolate(zin []float64, ndiv int) []float64 {
 		if i == 0 {
 			zinc = zin[i] / float64(ndiv)
 		} else {
-			zinc = (zin[i] - zin[i - 1]) / float64(ndiv)
+			zinc = (zin[i] - zin[i-1]) / float64(ndiv)
 		}
 		for j := 0; j < ndiv; j++ {
-			z = append(z, z[k] + zinc)
+			z = append(z, z[k]+zinc)
 			k++
 		}
 	}
 
 	return z
-}
-
-// Wilson-theta method.
-func WilsonTheta(z []float64, dt, period, h float64) (float64, float64, float64) {
-	theta := 1.4
-
-	tdt := theta * dt
-	omega := 2.0 * math.Pi / period
-	k := omega * omega
-	c := 2.0 * h * omega
-
-	// Constants for Willson-theta method.
-	a1 := 1.0 + tdt * c / 2.0 + k * tdt * tdt / 6.0
-	a2 := c + k * tdt
-	a3 := tdt * c / 2.0 + k / 3.0 * tdt * tdt
-
-	// Set initial values.
-	acc := 0.0
-	vel := 0.0
-	dis := 0.0
-	am := 0.0
-	vm := 0.0
-	dm := 0.0
-
-	for i := 1; i < len(z) - 1; i++ {
-		f := (theta - 1.0) * z[i] - theta * z[i + 1]
-		ath := (f - k * dis - a2 * vel - a3 * acc) / a1
-		acd := ((theta - 1.0) * acc + ath) / theta
-		dis = dis + dt * vel + acc * dt * dt / 3.0 + acd * dt * dt / 6.0
-		vel = vel + (acc + acd) * dt / 2.0
-		acc = acd
-		abz := math.Abs(acc + z[i + 1])
-		if abz > am { am = abz }
-		if math.Abs(vel) > vm { vm = math.Abs(vel) }
-		if math.Abs(dis) > dm { dm = math.Abs(dis) }
-	}
-
-	return am, vm, dm
 }
 
 func DefaultPeriod() []float64 {
@@ -416,13 +396,12 @@ func DefaultPeriod() []float64 {
 func CalcSI(resp []*Response) float64 {
 	var si float64 = 0.0
 	for i := 1; i < len(resp); i++ {
-		r0 := resp[i - 1]
+		r0 := resp[i-1]
 		r1 := resp[i]
 		if 0.1 < r1.Period && r1.Period <= 2.5 {
-			si = si + (r0.Sv + r1.Sv) * (r1.Period - r0.Period) / 2.0
+			si = si + (r0.Sv+r1.Sv)*(r1.Period-r0.Period)/2.0
 		}
 	}
-	
+
 	return si / 2.4
 }
-
