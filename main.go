@@ -78,7 +78,7 @@ Options:
 		wv = mul(wv, *opt_max/max)
 	}
 
-	spectrum := response.Spectrum(wv, period, *opt_h)
+	spectrum := response.Spectrum2(wv, period, *opt_h)
 
 	fmt.Println(wv.Name)
 	if *opt_si {
